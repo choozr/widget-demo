@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Choozr Widget Demos</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Choozr Widget Demos" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css" />
+    <script>
+        function beautify(json) {
+            // Take the one level JSON and print out the key: value\n
+            return Object.keys(json).map(function(key) {
+                return key + ': ' + json[key];
+            }).join('\n');
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Choozr Widget Online Store Demo <small>Receiving measurements from the user</small></h1>
+    <div class="store">
+        <div class="box-style product-images"><svg class="w-12 h-12 text-gray-200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 640 512"><path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"/></svg></div>
+        <div class="box-style product">
+            <h2>Custom Made Example Product</h2>
+            <div class="dummy">
+                <div class="line line-1"></div>
+                <div class="line line-2"></div>
+                <div class="line line-3"></div>
+                <div class="line line-4"></div>
+            </div>
+            <form action="#">
+                <div class="return-data data">
+                    <legend>
+                        <h3>Demo return data from Choozr</h3>
+                        <p>In an actual implementation this would be hidden from the user. Once received, this data can be sent to your backstore system in the format you need.</p>
+                    </legend>
+                    <label>
+                        <span>User ID</span>
+                        <input id="_userId" class="box-style" type="text" placeholder="-" disabled />
+                    </label>
+                    <label>
+                        <span>Measurement ID</span>
+                        <input id="_id" class="box-style" type="text" placeholder="-" disabled />
+                    </label>
+                    <label>
+                        <span>Body</span>
+                        <input id="body" class="box-style" type="text" placeholder="-" disabled />
+                    </label>
+                    <label>
+                        <span>Measurements</span>
+                        <textarea id="measurements" class="box-style" placeholder="-" disabled></textarea>
+                    </label>
+                </div>
+            </form>
+
+            <!-- Choozr Widget will be added here. The target "#choozr" means id="choozr" -->
+            <div id="choozr"></div>
+            <!-- / Choozr Widget -->
+
+            <button class="button" title="Just a demo">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Add the integration script for the Choozr Widget -->
+    <script src="http://localhost:1338/choozr.js"></script>
+    <script>
+        window.choozr = new Choozr({
+            storeId: "demostore", // ID of the store provided by Choozr
+            type: "measurements",
+            target: "#choozr",
+            onMeasurements: (measurements) => {
+                document.querySelector(".return-data").style.display = "block";
+                document.querySelector("input#_userId").value = measurements._userId;
+                document.querySelector("input#_id").value = measurements._id;
+                document.querySelector("input#body").value = measurements.body;
+                document.querySelector("textarea#measurements").value = beautify(measurements.measurements);
+                console.log("Measurements received", measurements);
+            }
+        });
+    </script>
+</body>
+
+</html>

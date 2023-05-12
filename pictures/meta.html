@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Choozr Widget Demos</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Choozr Widget Demos" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+    <h1>Choozr Widget Online Store Demo <small>Sending user details and receiving pictures</small></h1>
+    <div class="store">
+        <div class="box-style product-images"><svg class="w-12 h-12 text-gray-200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 640 512"><path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"/></svg></div>
+        <div class="box-style product">
+            <h2>Custom Made Example Product</h2>
+            <div class="dummy">
+                <div class="line line-1"></div>
+                <div class="line line-2"></div>
+                <div class="line line-3"></div>
+                <div class="line line-4"></div>
+            </div>
+            <form action="#">
+                <div class="send-data data">
+                    <legend>
+                        <h3>Demo meta data sent to Choozr</h3>
+                        <p>In an actual implementation these should be hidden from the user. You can use a meta field to send data to the user's measurement process. This data will then be visible in the TailorGuide Dashboard.</p>
+                    </legend>
+                    <label>
+                        <span>Name (Identifier)</span>
+                        <input id="name" class="box-style" type="text" value="John Doe" disabled />
+                    </label>
+                    <legend>
+                        <label><strong>Custom fields</strong></label>
+                    </legend>
+                    <label>
+                        <span>Customer ID</span>
+                        <input id="custom-id" class="box-style" type="text" value="12345" disabled />
+                    </label>
+                    <label>
+                        <span>Anything</span>
+                        <input id="custom-anything" class="box-style" type="text" value="That you need" disabled />
+                    </label>
+                </div>
+            </form>
+
+            <!-- Choozr Widget will be added here. The target "#choozr" means id="choozr" -->
+            <div id="choozr"></div>
+            <!-- / Choozr Widget -->
+
+            <button class="button" title="Just a demo">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Add the integration script for the Choozr Widget -->
+    <script src="http://localhost:1338/choozr.js"></script>
+
+    <!-- Configure the integration -->
+    <script>
+        window.choozr = new Choozr({
+            storeId: "demostore", // ID of the store provided by Choozr
+            type: "pictures",
+            // Meta data needs a name and can have custom fields under the custom key
+            meta: {
+                name: "John Doe",
+                custom: {
+                    id: "12345",
+                    anything: "That you need"
+                }
+            },
+            target: "#choozr",
+            onPictures: (pictures) => {
+                document.querySelector(".send-data").style.display = "none";
+                console.log("Pictures received", pictures);
+            }
+        });
+    </script>
+
+    <!-- Example for a logged-in user in Shopify -->
+    <!-- <script>
+        window.choozr = new Choozr({
+            storeId: "demostore", // ID of the store provided by Choozr
+            type: "pictures",
+            // Meta data needs a name and can have custom fields under the custom key
+            meta: {
+                name: {{ customer.name | json }},
+                custom: {
+                    id: {{ customer.id | json }},
+                    email: {{ customer.email | json }}
+                }
+            },
+            target: "#choozr",
+            onPictures: (pictures) => {
+                document.querySelector(".send-data").style.display = "none";
+                console.log("Pictures received", pictures);
+            }
+        });
+    </script> -->
+</body>
+
+</html>
